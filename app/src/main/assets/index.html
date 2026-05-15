@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Борисовна — Гадалка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #e6e6e6;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            border-radius: 28px;
+            padding: 1.8rem;
+            margin-bottom: 1.8rem;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .card:hover {
+            border-color: #3a3a3a;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 1.2rem;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #ffffff;
+            margin-bottom: 0.3rem;
+            transition: transform 0.2s ease;
+        }
+        
+        h1:hover {
+            transform: scale(1.02);
+        }
+
+        .subhead {
+            color: #888888;
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+            color: #aaaaaa;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: #111111;
+            border: 1px solid #2c2c2c;
+            border-radius: 20px;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            color: #f0f0f0;
+            font-family: inherit;
+            transition: all 0.25s ease-out;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #888888;
+            background: #161616;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        button {
+            width: 100%;
+            background: #1c1c1c;
+            border: 1px solid #3a3a3a;
+            border-radius: 40px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            margin-top: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            background: #2a2a2a;
+            border-color: #6a6a6a;
+            transform: scale(0.98);
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .result-card {
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            border-radius: 28px;
+            padding: 1.6rem;
+            margin-top: 1rem;
+            animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-block {
+            background: #050505;
+            border-left: 3px solid #888;
+            padding: 1.2rem;
+            border-radius: 18px;
+            margin-bottom: 1.8rem;
+            transition: all 0.2s;
+        }
+
+        .question-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+            letter-spacing: 2px;
+            margin-bottom: 0.6rem;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #ffffff;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .answer-section {
+            margin: 1.5rem 0;
+        }
+
+        .answer-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #aaa;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .answer-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #ddd;
+            background: #050505;
+            padding: 1.2rem;
+            border-radius: 24px;
+        }
+
+        .oracle-insight {
+            margin-top: 1.5rem;
+            background: #0f0f0f;
+            padding: 1.2rem;
+            border-radius: 20px;
+            border: 1px solid #262626;
+            transition: all 0.2s;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            color: #ccc;
+            font-size: 0.85rem;
+        }
+
+        .planet-influence {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .planet-tag {
+            background: #151515;
+            border: 1px solid #333;
+            border-radius: 40px;
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            color: #ccc;
+            transition: all 0.2s;
+        }
+        
+        .planet-tag:hover {
+            border-color: #777;
+            transform: translateY(-2px);
+        }
+
+        .advice-block {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #2c2c2c;
+        }
+
+        .footer-meta {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 2rem;
+            color: #4a4a4a;
+            letter-spacing: 0.5px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #222;
+            margin: 1rem 0;
+        }
+
+        /* сообщение об ошибке */
+        .error-message {
+            color: #ff8888;
+            font-size: 0.7rem;
+            margin-top: 0.4rem;
+            margin-left: 0.8rem;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 1.2rem;
+            }
+            .question-text {
+                font-size: 1.1rem;
+            }
+            h1 {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>🔮 БОРИСОВНА 🔮</h1>
+            <div class="subhead">гадалка — звёзды шепчут ответы</div>
+        </div>
+
+        <div class="form-group">
+            <label>🧑‍🦰 как к тебе обращаться?</label>
+            <input type="text" id="userName" placeholder="Света, Сергей, подруга..." value="Гость">
+        </div>
+        <div class="form-group">
+            <label>📅 дата рождения (день, месяц, год)</label>
+            <input type="text" id="birthDate" placeholder="например: 15.06.1995" value="22.08.1995" maxlength="10">
+            <span class="error-message" id="dateError"></span>
+        </div>
+        <div class="form-group">
+            <label>🌙 примерное время рождения (необязательно)</label>
+            <input type="time" id="birthTime" value="14:30">
+        </div>
+        <div class="form-group">
+            <label>✨ задай вопрос Борисовне ✨</label>
+            <textarea id="question" rows="2" placeholder="Например: Когда я встречу свою любовь? Стоит ли менять работу? Что меня ждёт в деньгах?"></textarea>
+        </div>
+        <button id="askBtn">⭐ ПОГАДАТЬ ⭐</button>
+    </div>
+
+    <div id="resultArea" style="display: none;"></div>
+    <div class="footer-meta">Борисовна гадает по звёздам, луне и древним картам ☽</div>
+</div>
+
+<script>
+    (function() {
+        // ------------------- АСТРОЛОГИЧЕСКАЯ БАЗА -------------------
+        const ZODIAC_SIGNS = [
+            "Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", 
+            "Весы", "Скорпион", "Стрелец", "Козерог", "Водолей", "Рыбы"
+        ];
+        
+        const PLANETS = ["Солнце", "Луна", "Меркурий", "Венера", "Марс", "Юпитер", "Сатурн", "Уран", "Нептун", "Плутон"];
+        
+        const PLANET_MEANINGS = {
+            "Солнце": "сила личности, уверенность, жизненная энергия",
+            "Луна": "эмоции, интуиция, подсознание, перемены настроения",
+            "Меркурий": "мышление, коммуникация, обучение, поездки",
+            "Венера": "любовь, красота, деньги, гармония, отношения",
+            "Марс": "действие, страсть, борьба, инициатива",
+            "Юпитер": "удача, расширение, оптимизм, путешествия",
+            "Сатурн": "дисциплина, уроки судьбы, время, ответственность",
+            "Уран": "неожиданности, свобода, инновации, перемены",
+            "Нептун": "мечты, иллюзии, вдохновение, тайны",
+            "Плутон": "трансформация, сила, кризисы и возрождение"
+        };
+        
+        // ----- ФУНКЦИЯ ПАРСИНГА ДАТЫ ИЗ ФОРМАТА ДД.ММ.ГГГГ -----
+        function parseDateFromString(dateStr) {
+            if (!dateStr || dateStr.trim() === "") return null;
+            
+            // Поддерживаем форматы: ДД.ММ.ГГГГ или ДД/ММ/ГГГГ или ДД-ММ-ГГГГ
+            let cleaned = dateStr.replace(/[\/\-\.]/g, '.');
+            let parts = cleaned.split('.');
+            if (parts.length !== 3) return null;
+            
+            let day = parseInt(parts[0], 10);
+            let month = parseInt(parts[1], 10);
+            let year = parseInt(parts[2], 10);
+            
+            if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+            if (year < 1900 || year > new Date().getFullYear()) return null;
+            if (month < 1 || month > 12) return null;
+            if (day < 1 || day > 31) return null;
+            
+            // простая проверка на максимальное число дней в месяце
+            const daysInMonth = new Date(year, month, 0).getDate();
+            if (day > daysInMonth) return null;
+            
+            return new Date(year, month - 1, day);
+        }
+        
+        // форматирование даты для отображения
+        function formatDateForDisplay(dateObj) {
+            if (!dateObj) return "неизвестная дата";
+            let day = dateObj.getDate().toString().padStart(2, '0');
+            let month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+            let year = dateObj.getFullYear();
+            return `${day}.${month}.${year}`;
+        }
+        
+        // функция для стабильного "случайного"
+        function getHashFromData(userName, birthDateStr, birthTime, question) {
+            const base = `${userName}|${birthDateStr}|${birthTime}|${question}`.toLowerCase();
+            let hash = 2166136261;
+            for(let i = 0; i < base.length; i++) {
+                hash ^= base.charCodeAt(i);
+                hash *= 16777619;
+            }
+            return Math.abs(hash);
+        }
+        
+        function seededRandom(seed, salt) {
+            const x = Math.sin(seed + salt) * 10000;
+            return x - Math.floor(x);
+        }
+        
+        function getZodiacSignByDate(dateObj) {
+            if(!dateObj) return "загадочный знак";
+            const month = dateObj.getMonth() + 1;
+            const day = dateObj.getDate();
+            if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return "Овен";
+            if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return "Телец";
+            if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return "Близнецы";
+            if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return "Рак";
+            if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return "Лев";
+            if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return "Дева";
+            if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return "Весы";
+            if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return "Скорпион";
+            if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return "Стрелец";
+            if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return "Козерог";
+            if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return "Водолей";
+            return "Рыбы";
+        }
+        
+        function detectTheme(question) {
+            const q = question.toLowerCase();
+            if(q.includes('любов') || q.includes('отношен') || q.includes('брак') || q.includes('сердц') || q.includes('встрет') || q.includes('романт')) 
+                return { theme: "любовь и отношения", planets: ["Венера", "Луна", "Марс"], houses: "7 дом (партнёрство), 5 дом (романтика)" };
+            if(q.includes('работ') || q.includes('карьер') || q.includes('професс') || q.includes('успех') || q.includes('бизнес') || q.includes('должност')) 
+                return { theme: "карьера и призвание", planets: ["Сатурн", "Юпитер", "Марс"], houses: "10 дом (карьера), 6 дом (работа)" };
+            if(q.includes('денег') || q.includes('финанс') || q.includes('богатств') || q.includes('доход') || q.includes('материальн')) 
+                return { theme: "финансы и изобилие", planets: ["Юпитер", "Венера", "Меркурий"], houses: "2 дом (деньги), 8 дом (ресурсы)" };
+            if(q.includes('здоров') || q.includes('болезн') || q.includes('самочувств') || q.includes('энерги')) 
+                return { theme: "здоровье и жизненные силы", planets: ["Солнце", "Луна", "Марс"], houses: "6 дом (здоровье), 1 дом (личность)" };
+            if(q.includes('путешеств') || q.includes('поездк') || q.includes('переезд') || q.includes('заграниц')) 
+                return { theme: "путешествия и перемены", planets: ["Уран", "Юпитер", "Меркурий"], houses: "9 дом (дальние поездки), 3 дом (ближние)" };
+            if(q.includes('семь') || q.includes('родн') || q.includes('домашн') || q.includes('родител')) 
+                return { theme: "семья и корни", planets: ["Луна", "Сатурн", "Венера"], houses: "4 дом (семья), 2 дом (ценности)" };
+            if(q.includes('будущ') || q.includes('ожида') || q.includes('прогноз') || q.includes('что ждёт')) 
+                return { theme: "жизненный путь и судьба", planets: ["Юпитер", "Сатурн", "Плутон"], houses: "9 дом (смысл жизни), 12 дом (карма)" };
+            return { theme: "личный рост и вдохновение", planets: ["Солнце", "Нептун", "Уран"], houses: "1 дом (личность), 11 дом (желания)" };
+        }
+        
+        function generateFullAnswer(userName, question, birthDateObj, birthDateRaw, themeData, seed) {
+            const sign = getZodiacSignByDate(birthDateObj);
+            const planetPositions = {};
+            for(let p of PLANETS) {
+                const idx = Math.floor(seededRandom(seed, p.length + 33) * ZODIAC_SIGNS.length);
+                planetPositions[p] = ZODIAC_SIGNS[idx];
+            }
+            
+            const moonPhaseIdx = Math.floor(seededRandom(seed, 888) * 4);
+            const moonPhases = ["🌑 новолуние (время начинаний)", "🌓 первая четверть (действие)", "🌕 полнолуние (пик эмоций)", "🌗 последняя четверть (подведение итогов)"];
+            const currentMoon = moonPhases[moonPhaseIdx];
+            
+            let answer = `Здравствуй, ${userName}. 👵🏻 Борисовна слышит твой зов. Твой знак зодиака — <strong>${sign}</strong>. Сейчас Луна в фазе ${currentMoon}. `;
+            answer += `Я перебрала карты и звёздную пыль, чтобы дать тебе честный ответ.<br><br>`;
+            
+            answer += `<strong>✨ О чём ты спросил(а): ${themeData.theme} ✨</strong><br>`;
+            answer += `Особое влияние сейчас оказывают `;
+            const relevantPlanets = themeData.planets.slice(0, 2);
+            const planetDesc = relevantPlanets.map(p => `${p} (${PLANET_MEANINGS[p]})`).join(' и ');
+            answer += `<strong>${planetDesc}</strong>. Вот что шепчут звёзды:<br><br>`;
+            
+            let prediction = "";
+            const seedPred = seed;
+            const predType = Math.floor(seededRandom(seedPred, 101) * 16);
+            const predictionsList = [
+                `Судьба готовит для тебя неожиданный поворот в области ${themeData.theme}. Венера в знаке ${planetPositions["Венера"]} говорит: тебя ждёт тёплая встреча или укрепление существующих уз. Обрати внимание на людей вокруг — один из них сыграет ключевую роль.`,
+                `Марс активирует твою внутреннюю силу. Ответ появится в течение 3-5 недель. Юпитер, проходящий по ${planetPositions["Юпитер"]}, дарит удачу в новых проектах. Доверяй интуиции.`,
+                `Твой вопрос связан с уроками Сатурна. Планета в знаке ${planetPositions["Сатурн"]} указывает: нужно проявить терпение и дисциплину. Результат придёт, когда усвоишь важный опыт.`,
+                `Луна в ${planetPositions["Луна"]} делает тебя очень восприимчивым(ой). Сейчас благоприятный момент для размышлений. Твоя ситуация изменится мягко, но навсегда. Ближайшее полнолуние принесёт ясность.`,
+                `Звёзды говорят: ты на пороге важного выбора. Уран в ${planetPositions["Уран"]} дарует неожиданные шансы. В сфере ${themeData.theme} произойдёт маленькое чудо — будь открыт(а) к новому.`,
+                `Меркурий в ${planetPositions["Меркурий"]} усиливает общение. Ответ придёт через разговор или знак. Не бойся просить совета у близких.`,
+                `Солнце и Луна в гармонии — время действовать! Удачны начинания, связанные с ${themeData.theme}. Твой внутренний свет притянет нужные обстоятельства.`,
+                `Трансплутоновые планеты указывают на глубокие перемены. Трансформация коснётся тебя. Скоро ты пересмотришь взгляды на ${themeData.theme} — и это приведёт к облегчению.`,
+                `Юпитер расширяет границы — жди приятный сюрприз в вопросах ${themeData.theme}. Но Нептун напоминает: избегай иллюзий, смотри реальности в глаза.`,
+                `Аспект Венеры и Марса создаёт магнетическую притягательность. Если речь о любви — скоро появится человек, который тронет сердце. В финансах или работе — смелый шаг окупится.`,
+                `Сатурн в гармонии с Юпитером: старые трудности превратятся в опыт. Твой вопрос разрешится через осознание собственной ценности.`,
+                `Нептун окутывает тайной, но интуиция сейчас на пике. Если вопрос беспокоит — прислушайся к снам. В ближайшие две недели получишь ясный ответ.`,
+                `В доме ${themeData.houses} загорается свет удачи. Борисовна чувствует: скоро ты получишь знак — может быть, случайная встреча или неожиданное известие.`,
+                `Карты Таро и звёзды говорят «да» твоим сокровенным желаниям, но с одним условием: отпусти сомнения и действуй без страха.`,
+                `По лунным ритмам сейчас энергия роста. Финансовый и любовный потоки усиливаются. Не упускай момент — сделай первый шаг в ближайшие 7 дней.`,
+                `Судьба улыбается тебе. Даже если ответ не пришёл мгновенно — знай, Борисовна видит: всё идёт к лучшему. Жди новостей через месяц.`
+            ];
+            prediction = predictionsList[predType % predictionsList.length];
+            
+            answer += `<div class="oracle-insight">🔮 ${prediction} 🔮</div>`;
+            
+            answer += `<div class="insight-title">🌠 Какие планеты влияют сильнее всего?</div>`;
+            answer += `<div class="planet-influence">`;
+            for(let i=0; i<3; i++) {
+                let planet = PLANETS[(seed + i*12) % PLANETS.length];
+                let signPos = planetPositions[planet];
+                answer += `<span class="planet-tag">${planet} в ${signPos}: ${PLANET_MEANINGS[planet].substring(0, 45)}</span>`;
+            }
+            answer += `</div>`;
+            
+            answer += `<div class="advice-block">
+                        <div class="insight-title">⭐ Совет от Борисовны (простые действия):</div>
+                        <ul style="margin-left: 1.2rem; color: #ccc; line-height: 1.5;">
+                            <li>🔹 Запиши свой вопрос на бумагу — Меркурий помогает материализовать мысли.</li>
+                            <li>🔹 В ближайшие 3 дня прояви инициативу там, где раньше боялся(ась) — Марс даёт смелость.</li>
+                            <li>🔹 Носи с собой маленькую монетку или кусочек дерева — это резонирует с ${themeData.planets[0]}.</li>
+                        </ul>
+                       </div>`;
+            
+            answer += `<hr><div style="font-size:0.85rem; background:#0c0c0c; border-radius:18px; padding:12px;">
+                        💡 <strong>Астрологический факт от Борисовны:</strong> В твоей карте важную роль играет ${themeData.houses}. Раскрытие ситуации напрямую связано с личным ростом. 
+                        Лунные узлы рекомендуют быть открытым(ой) к переменам уже в следующем месяце.
+                       </div>`;
+            
+            return answer;
+        }
+        
+        // ----- ВАЛИДАЦИЯ ДАТЫ С ОБРАТНОЙ СВЯЗЬЮ -----
+        let currentValidDate = null;
+        let currentDateString = "22.08.1995";
+        
+        function validateAndUpdateDate(inputElement, errorElement) {
+            let rawValue = inputElement.value.trim();
+            if (rawValue === "") {
+                errorElement.textContent = "Введите дату рождения";
+                return false;
+            }
+            
+            let parsedDate = parseDateFromString(rawValue);
+            if (!parsedDate) {
+                errorElement.textContent = "❌ Введите корректную дату (например, 15.06.1995) от 1900 до текущего года";
+                return false;
+            }
+            
+            errorElement.textContent = "";
+            currentValidDate = parsedDate;
+            currentDateString = formatDateForDisplay(parsedDate);
+            // обновляем поле ввода красивым отформатированным значением
+            inputElement.value = currentDateString;
+            return true;
+        }
+        
+        function handleAsk() {
+            const userName = document.getElementById('userName').value.trim() || "гость";
+            const birthDateInput = document.getElementById('birthDate');
+            const dateErrorSpan = document.getElementById('dateError');
+            
+            // валидируем дату перед гаданием
+            if (!validateAndUpdateDate(birthDateInput, dateErrorSpan)) {
+                alert("Борисовна просит: укажи правильную дату рождения! 🌟 Например: 15.06.1995");
+                return;
+            }
+            
+            const birthDateRaw = currentDateString;
+            const birthDateObj = currentValidDate;
+            const birthTime = document.getElementById('birthTime').value || "12:00";
+            const question = document.getElementById('question').value.trim();
+            
+            if(!question) {
+                alert("Борисовна шепчет: задай мне вопрос! ✨");
+                return;
+            }
+            
+            const seed = getHashFromData(userName, birthDateRaw, birthTime, question);
+            const themeData = detectTheme(question);
+            const fullAnswer = generateFullAnswer(userName, question, birthDateObj, birthDateRaw, themeData, seed);
+            
+            const resultDiv = document.getElementById('resultArea');
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = `
+                <div class="result-card">
+                    <div class="question-block">
+                        <div class="question-label">❓ Борисовна, ответь на вопрос</div>
+                        <div class="question-text">«${escapeHtml(question)}»</div>
+                        <div style="font-size:0.7rem; margin-top:10px; color:#777;">${escapeHtml(userName)} | ${birthDateRaw} | ${birthTime}</div>
+                    </div>
+                    <div class="answer-section">
+                        <div class="answer-title">🔮 Слово Борисовны 🔮</div>
+                        <div class="answer-text">
+                            ${fullAnswer}
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.7rem; text-align: center; color: #555; border-top: 1px solid #222; padding-top: 1rem;">
+                        ✨ Гадалка Борисовна ✨ предсказание на основе звёзд, планет и лунных циклов
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        // инициализация
+        const birthDateInput = document.getElementById('birthDate');
+        const dateErrorSpan = document.getElementById('dateError');
+        
+        // при потере фокуса проверяем дату
+        birthDateInput.addEventListener('blur', function() {
+            validateAndUpdateDate(birthDateInput, dateErrorSpan);
+        });
+        
+        // при вводе очищаем ошибку
+        birthDateInput.addEventListener('input', function() {
+            dateErrorSpan.textContent = "";
+        });
+        
+        document.getElementById('askBtn').addEventListener('click', handleAsk);
+        
+        window.addEventListener('load', () => {
+            // устанавливаем валидную начальную дату
+            validateAndUpdateDate(birthDateInput, dateErrorSpan);
+            if(!document.getElementById('question').value) {
+                document.getElementById('question').value = "Что меня ждёт в любви?";
+            }
+        });
+    })();
+</script>
+</body>
+</html>
